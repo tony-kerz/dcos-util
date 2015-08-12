@@ -1,6 +1,5 @@
-//#!/usr/bin/env node
-
 // ./dcos-util.js marathon-json -i foo -r myReg:5000 -b b1 -c c1 -u '{"env":{"foo":"bar"}}'
+
 var program = require('commander')
 var _ = require('lodash')
 
