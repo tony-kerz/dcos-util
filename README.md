@@ -18,18 +18,18 @@ myApp
 
 ## marathon-json
 ```
-prompt> cat marathon-config.js
-module.exports = {
-  env: {
-    foo: 'bar'
+prompt> cat marathon.json
+{
+  "env": {
+    "foo": "bar"
   }
 }
 ```
 ```
-prompt> docker run --rm -v $(pwd)/marathon-config.js:/marathon-config.js tonykerz/dcos-util marathon-json -i foo -d myReg:5000/foo -c c1 -v myVhost -p 0.5 -m 512 -n 2 > marathon.json
+prompt> docker run --rm -v $(pwd)/marathon.json:/marathon.json tonykerz/dcos-util marathon-json -i foo -d myReg:5000/foo -c c1 -v myVhost -p 0.5 -m 512 -n 2 > foo.json
 ```
 ```
-prompt> cat marathon.json
+prompt> cat foo.json
 {
   "env": {
     "foo": "bar",
