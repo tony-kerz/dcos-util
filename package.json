@@ -1,5 +1,5 @@
 {
-  "name": "node-scratch",
+  "name": "dcos-util",
   "version": "1.0.0",
   "description": "",
   "main": "dcos-util.js",
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tony-kerz/node-scratch.git"
+    "url": "https://github.com/tony-kerz/dcos-util.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/tony-kerz/node-scratch/issues"
+    "url": "https://github.com/tony-kerz/dcos-util/issues"
   },
-  "homepage": "https://github.com/tony-kerz/node-scratch",
+  "homepage": "https://github.com/tony-kerz/dcos-util",
   "engines": {
     "iojs": "3.0.x"
   }
