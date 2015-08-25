@@ -30,8 +30,7 @@ try {
   dbg('unable to load [%s]: %o', program.marathon, e)
 }
 
-result = _.merge(
-  marathon,
+result = _.defaultsDeep(
   {
     id: program.id,
     container: {
@@ -56,7 +55,8 @@ result = _.merge(
       minimumHealthCapacity: 0.5,
       maximumOverCapacity: 0.2
     }
-  }
+  },
+  marathon
 )
 
 console.log(JSON.stringify(result, null, 2))
