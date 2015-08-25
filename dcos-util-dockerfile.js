@@ -25,20 +25,13 @@ if (type == 'exec') {
   entrypoint.push(type)
 }
 
-// FROM gliderlabs/herokuish
-//
-// RUN mkdir -p /app
-// ADD . /app
-// RUN /build
+// FROM tonykerz/builder
 //
 // ENTRYPOINT ["/exec", "node", "/app/dcos-util.js"]
 // --or--
 // ENTRYPOINT ["/start", "web"]
 
-dockerfile = 'FROM gliderlabs/herokuish\n'
-dockerfile += 'RUN mkdir -p /app\n'
-dockerfile += 'ADD . /app\n'
-dockerfile += 'RUN /build\n'
+dockerfile = 'FROM tonykerz/builder\n'
 dockerfile += `ENTRYPOINT ${JSON.stringify(entrypoint)}`
 
 console.log(dockerfile)

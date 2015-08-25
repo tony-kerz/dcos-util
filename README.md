@@ -9,7 +9,7 @@ here is a brief example of usage:
 
 ## id
 ```
-prompt> id=`docker run <user>/dcos-util id myApp.devBuild`
+prompt> id=`docker run --rm tonykerz/dcos-util id myApp.devBuild`
 ```
 ```
 prompt> echo $id
@@ -18,14 +18,21 @@ myApp
 
 ## marathon-json
 ```
-prompt> docker run <user>/dcos-util marathon-json -i foo -r myReg:5000 -b b1 -c c1 -v myVhost -u '{"env":{"foo":"bar"}}' -p 0.5 -m 512 -n 2 > marathon.json
+prompt> cat marathon-config.js
+module.exports = {
+  env: {
+    foo: 'bar'
+  }
+}
+```
+```
+prompt> docker run --rm -v $(pwd)/marathon-config.js:/marathon-config.js tonykerz/dcos-util marathon-json -i foo -d myReg:5000/foo -c c1 -v myVhost -p 0.5 -m 512 -n 2 > marathon.json
 ```
 ```
 prompt> cat marathon.json
 {
   "env": {
     "foo": "bar",
-    "buildId": "b1",
     "commitId": "c1"
   },
   "id": "foo",
@@ -59,13 +66,10 @@ prompt> cat Procfile
 exec: node /app/my-app.js
 ```
 ```
-prompt> docker run <user>/dcos-util dockerfile > Dockerfile
+prompt> docker run --rm tonykerz/dcos-util dockerfile > Dockerfile
 ```
 ```
 prompt> cat Dockerfile
-FROM gliderlabs/herokuish
-RUN mkdir -p /app
-ADD . /app
-RUN /build
+FROM tonykerz/builder
 ENTRYPOINT ["/exec","node","/app/my-app.js"]
 ```
