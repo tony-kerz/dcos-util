@@ -10,7 +10,7 @@ program
 .option('-p, --cpus <cpus>', 'specify cpu count', 1)
 .option('-m, --mem <mem>', 'memory in MB', 1024)
 .option('-n, --instanceCount <instanceCount>', 'number of instances', 1)
-.option('-j, --marathon <marathon>', 'marathon json', './marathon.json')
+.option('-j, --marathon <marathon>', 'marathon json', '/marathon.json')
 .parse(process.argv)
 
 if (!(
