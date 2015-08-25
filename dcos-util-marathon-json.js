@@ -1,36 +1,42 @@
-// ./dcos-util.js marathon-json -i foo -r myReg:5000 -b b1 -c c1 -u '{"env":{"foo":"bar"}}'
-
+var dbg = require('debug')('dcos-util:marathon')
 var program = require('commander')
 var _ = require('lodash')
 
 program
 .option('-i, --id <id>', 'specify id (required)')
-.option('-r, --registryUrl <registryUrl>', 'specify registry url (required)')
-.option('-b, --buildId <buildId>', 'specify build id (required)')
+.option('-d, --image <image>', 'specify docker image name (required)')
 .option('-c, --commitId <commitId>', 'specify commit id (required)')
 .option('-v, --vhostBase <vhostBase>', 'specify virtual host base', 'x.healthagen.com')
-.option('-u, --userJson <userJson>', 'specify user json', {})
-.option('-p, --cpus <cpus>', 'specify cpu count', 0.25)
-.option('-m, --mem <mem>', 'memory in MB', 256)
-.option('-n, --instances <instances>', 'number of instances', 1)
+.option('-p, --cpus <cpus>', 'specify cpu count', 1)
+.option('-m, --mem <mem>', 'memory in MB', 1024)
+.option('-n, --instanceCount <instanceCount>', 'number of instances', 1)
+.option('-j, --marathon <marathon>', 'marathon json', './marathon.json')
 .parse(process.argv)
 
 if (!(
   program.id &&
-  program.registryUrl &&
-  program.buildId &&
+  program.image &&
   program.commitId
 )) {
   program.help()
 }
 
+var marathon
+try {
+  marathon = require(program.marathon)
+  dbg('marathon: %o', marathon)
+} catch (e) {
+  marathon = {}
+  dbg('unable to load [%s]: %o', program.marathon, e)
+}
+
 result = _.merge(
-  JSON.parse(program.userJson),
+  marathon,
   {
     id: program.id,
     container: {
       docker: {
-        image: `${program.registryUrl}/${program.id}`,
+        image: program.image,
         network: 'BRIDGE'
       },
       type: 'DOCKER'
@@ -40,11 +46,10 @@ result = _.merge(
     },
     cpus: program.cpus,
     mem: program.mem,
-    instances: program.instances,
+    instances: program.instanceCount,
     forcePullImage: true,
     healthChecks: [{}],
     env: {
-      buildId: program.buildId,
       commitId: program.commitId
     },
     upgradeStrategy: {
@@ -55,32 +60,3 @@ result = _.merge(
 )
 
 console.log(JSON.stringify(result, null, 2))
-
-// {
-//     "container": {
-//         "type": "DOCKER",
-//         "docker": {
-//             "network": "BRIDGE",
-//             "image": "${REGISTRY_URL}/${APP}:${BUILD_NUMBER}",
-//             "portMappings": [
-//                 { "containerPort": 4567, "hostPort": 0, "protocol": "tcp"}
-//             ]
-//         }
-//     },
-//     "labels": {
-//         "VIRTUAL_HOST": "jenkins.x.healthagen.com"
-//     },
-//     "id": "${APP}",
-//     "forcePullImage": true,
-//     "cpus": 0.25,
-//     "mem": 248,
-//     "env": {
-//             "MESSAGE": "${BUILD_TAG}, SHA=${GIT_COMMIT}",
-//             "GIT_SHA": "${GIT_COMMIT}",
-//             "JENKINS_BUILD_INFO": "${BUILD_TAG}"
-//     },
-//     "upgradeStrategy": {
-//         "minimumHealthCapacity": 0.5,
-//         "maximumOverCapacity": 0.2
-//     }
-// }

@@ -5,6 +5,7 @@
   "main": "dcos-util.js",
   "dependencies": {
     "commander": "^2.8.1",
+    "debug": "^2.2.0",
     "lodash": "^3.10.1"
   },
   "devDependencies": {},
