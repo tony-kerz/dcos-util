@@ -1,6 +1,7 @@
 var dbg = require('debug')('dcos-util:marathon')
 var program = require('commander')
 var _ = require('lodash')
+var util = require('util')
 
 program
 .option('-i, --id <id>', 'specify id (required)')
@@ -41,7 +42,7 @@ result = _.defaultsDeep(
       type: 'DOCKER'
     },
     labels: {
-      VIRTUAL_HOST: `${program.id}.${program.vhostBase}`
+      VIRTUAL_HOST: util.format('%s.%s', program.id, program.vhostBase)
     },
     cpus: program.cpus,
     mem: program.mem,
