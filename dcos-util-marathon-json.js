@@ -44,17 +44,13 @@ result = _.defaultsDeep(
     labels: {
       VIRTUAL_HOST: util.format('%s.%s', program.id, program.vhostBase)
     },
-    cpus: program.cpus,
-    mem: program.mem,
-    instances: program.instanceCount,
+    cpus: marathon.cpus || program.cpus,
+    mem: marathon.mem || program.mem,
+    instances: marathon.instanceCount || program.instanceCount,
     forcePullImage: true,
     healthChecks: [{}],
     env: {
       commitId: program.commitId
-    },
-    upgradeStrategy: {
-      minimumHealthCapacity: 0.5,
-      maximumOverCapacity: 0.2
     }
   },
   marathon
