@@ -1,6 +1,7 @@
 var dbg = require('debug')('dcos-util:marathon')
 var program = require('commander')
 var _ = require('lodash')
+var util = require('util')
 
 program
 .option('-i, --id <id>', 'specify id (required)')
@@ -10,7 +11,7 @@ program
 .option('-p, --cpus <cpus>', 'specify cpu count', 1)
 .option('-m, --mem <mem>', 'memory in MB', 1024)
 .option('-n, --instanceCount <instanceCount>', 'number of instances', 1)
-.option('-j, --marathon <marathon>', 'marathon json', './marathon.json')
+.option('-j, --marathon <marathon>', 'marathon json', '/marathon.json')
 .parse(process.argv)
 
 if (!(
@@ -41,19 +42,15 @@ result = _.defaultsDeep(
       type: 'DOCKER'
     },
     labels: {
-      VIRTUAL_HOST: `${program.id}.${program.vhostBase}`
+      VIRTUAL_HOST: util.format('%s.%s', program.id, program.vhostBase)
     },
-    cpus: program.cpus,
-    mem: program.mem,
-    instances: program.instanceCount,
+    cpus: marathon.cpus || program.cpus,
+    mem: marathon.mem || program.mem,
+    instances: marathon.instanceCount || program.instanceCount,
     forcePullImage: true,
     healthChecks: [{}],
     env: {
       commitId: program.commitId
-    },
-    upgradeStrategy: {
-      minimumHealthCapacity: 0.5,
-      maximumOverCapacity: 0.2
     }
   },
   marathon

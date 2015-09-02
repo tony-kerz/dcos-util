@@ -21,8 +21,5 @@
   "bugs": {
     "url": "https://github.com/tony-kerz/dcos-util/issues"
   },
-  "homepage": "https://github.com/tony-kerz/dcos-util",
-  "engines": {
-    "iojs": "3.0.x"
-  }
+  "homepage": "https://github.com/tony-kerz/dcos-util"
 }
